@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
+import "IERC20.sol";
+
 
 contract SavingsSmarContract {
     address owner;
+    address tokenAddress;
+    uint256 tokenBalance = IERC20(tokenAddress).balanceOf(msg.sender);
     mapping(address => uint256) balance;
 
     constructor (){
@@ -30,12 +34,28 @@ contract SavingsSmarContract {
         require(msg.sender != address(0));
 
         balance[msg.sender] -= _amount;
+    }
 
+// withdraw from contract back into user account 
+// - amount to be withdrawn 
+// - operation is performed by account owner 
+// - account owner must have enough money to withdrawn: balance >=amount
+// - amount to be sent must be greater than zero to avoid waste of gas 
+// - operation not to be initiated by zero address 
+// - receiving account must not be zero address 
+// - money is going from contract to user account: contract to be deducted
+
+    function withdrawFunds(uint256 _amount) external {
+        require(_amount>0, "amount to be withdrawn must be greater than zero");
+        require(tokenBalance >= _amount, "you dont have enough money");
+        require(msg.sender != address(0));
+
+        tokenBalance -= _amount;
+    }
 
     }
 
 
-}
 
 
 
@@ -52,9 +72,6 @@ contract SavingsSmarContract {
 
 
 
-
-
-// withdraw from contract back into user account 
 // send money from user account into another account 
 // send money from contract into another account 
 // check contract balance 
