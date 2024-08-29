@@ -53,7 +53,15 @@ contract SavingsSmarContract {
         tokenBalance -= _amount;
     }
 
+// check personal balance 
+// - function caller must be account owner 
+
+    function getMyBalance() external returns(uint256){ 
+        return(balance[msg.sender]);
     }
+
+
+}
 
 
 
@@ -75,6 +83,5 @@ contract SavingsSmarContract {
 // send money from user account into another account 
 // send money from contract into another account 
 // check contract balance 
-// check personal balance 
 // check any balance 
 
